@@ -5,21 +5,19 @@ import java.io.PrintWriter;
 
 import javax.swing.JProgressBar;
 
-public class InsertionSort implements Runnable {
+public class RadixSort implements Runnable {
 
 	private Integer[] data;
 	private double progressCount = 0.0;
 	private int numberOfPasses = -1;
 	private long startTime, finishTime, timeElapsed;
-	JProgressBar bar;
-	//private int bullshit;
+	private JProgressBar bar;
 	
-	public InsertionSort(Integer[] data, JProgressBar bar)
+	public RadixSort(Integer[] data, JProgressBar bar)
 	{
 		this.data = data;
 		this.bar = bar;
 	}
-	
 	
 	public void run()
 	{
@@ -27,7 +25,7 @@ public class InsertionSort implements Runnable {
 		insertionSort();
 		finishTime = System.nanoTime();
 		timeElapsed = finishTime - startTime;
-		System.out.println("Insertion: " + timeElapsed);
+		System.out.println("Radix: " + timeElapsed);
 		outputToFile();
 	}
 	
@@ -55,10 +53,10 @@ public class InsertionSort implements Runnable {
 			File outputFile = new File("output.dat");
 			try {
 				PrintWriter outStream = new PrintWriter(new FileWriter(outputFile, true));
-				outStream.append("InsertionSort Thread elapsed in " + timeElapsed + " nanoseconds");
+				outStream.append("Radix Sort Thread elapsed in " + timeElapsed + " nanoseconds");
 				outStream.close();
 			} catch (IOException e) {
-				System.out.println("InsertionSort didn't write.. gg");
+				System.out.println("Radix Sort didn't write.");
 			}
 			
 		}
@@ -68,17 +66,7 @@ public class InsertionSort implements Runnable {
 	  	int result;
 	  	progressCount = 1 - (((double)data.length - (double)numberOfPasses)/(double)data.length);
 	  	result = (int) (progressCount * 100);
-	  	//System.out.println(result);
-	  	//System.out.println(numberOfPasses);
-	  	//bullshit = result;
 	  	bar.setValue(result);
 	  	return result;
 	  }
-	  
-	//  public String toString()
-	//  {
-	//  	return bullshit + "";
-	//  	
-	 // }
-	  
 }

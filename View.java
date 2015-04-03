@@ -1,5 +1,3 @@
-package Project3;
-
 import javax.swing.*;
 
 import java.awt.*;
@@ -9,56 +7,67 @@ import java.util.Random;
 
 public class View implements ActionListener
 {
-	
-	private boolean oneDone = false;
-	private boolean twoDone = false;
-	private boolean threeDone = false;
-	private boolean fourDone = false;
-	private boolean fiveDone = false;
-	
 	private JFrame frame = new JFrame("Project 3");
-	private JPanel pane = new JPanel();
-	
-	private FlowLayout layout = new FlowLayout();
-	
+	private JPanel pane = new JPanel(new GridLayout(6,1));
+
 	private JButton go = new JButton("Go");
-	
+
 	private JTextField input = new JTextField();
-	
+
+	private JPanel inputPanel = new JPanel(new FlowLayout());
+	private JPanel bubblePanel = new JPanel(new FlowLayout());
+	private JPanel insertionPanel = new JPanel(new FlowLayout());
+	private JPanel mergePanel = new JPanel(new FlowLayout());
+	private JPanel quickPanel = new JPanel(new FlowLayout());
+	private JPanel radixPanel = new JPanel(new FlowLayout());
+
 	private JProgressBar bubbleBar = new JProgressBar();
 	private JProgressBar insertionBar = new JProgressBar();
-	private Timer t;
-	
+	private JProgressBar mergeBar = new JProgressBar();
+	private JProgressBar quickBar = new JProgressBar();
+	private JProgressBar radixBar = new JProgressBar();
+
 	private int userInput;
-	
-	private JLabel error = new JLabel("You must enter in a value between 1000 and 100000000.");
+
 	private JLabel bubbleLabel = new JLabel("Bubble Sort:");
 	private JLabel insertionLabel = new JLabel("Insertion Sort:");
-	
+	private JLabel mergeLabel = new JLabel("Merge Sort:");
+	private JLabel quickLabel = new JLabel("Quick Sort:");
+	private JLabel radixLabel = new JLabel("Radix Sort:");
+
 	public View()
 	{
-		//GUI using flow layout
-		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
-		pane.setLayout(layout);
-		
+
 		input.setPreferredSize(new Dimension(150, 25));
-		
-		pane.add(error);
-		pane.add(input);
-		pane.add(go);
-		pane.add(bubbleLabel);
-		pane.add(bubbleBar);
-		pane.add(insertionLabel);
-		pane.add(insertionBar);
-		
+
+		inputPanel.add(input);
+		inputPanel.add(go);
+		bubblePanel.add(bubbleLabel);
+		bubblePanel.add(bubbleBar);
+		insertionPanel.add(insertionLabel);
+		insertionPanel.add(insertionBar);
+		mergePanel.add(mergeLabel);
+		mergePanel.add(mergeBar);
+		quickPanel.add(quickLabel);
+		quickPanel.add(quickBar);
+		radixPanel.add(radixLabel);
+		radixPanel.add(radixBar);
+
+		pane.add(inputPanel);
+		pane.add(bubblePanel);
+		pane.add(insertionPanel);
+		pane.add(mergePanel);
+		pane.add(quickPanel);
+		pane.add(radixPanel);
+
 		go.addActionListener(this);
-		
+
 		frame.add(pane);
 		frame.pack();
-		error.setText("");
 		frame.setVisible(true);
+		frame.setResizable(false);
 	}
 
 	@Override
@@ -68,59 +77,59 @@ public class View implements ActionListener
 		{
 			//checks user input
 			if(Integer.parseInt(input.getText()) > 10000000 || Integer.parseInt(input.getText()) < 1000)
-				error.setText("You must enter in a value between 1000 and 100000000.");
+				JOptionPane.showMessageDialog(null,"You must enter in a value between 1000 and 100000000");
 			else
 			{
-				userInput = Integer.parseInt(input.getText());
-				error.setText("");
-				//look at runThreads method, private helper method below
-				runThreads();
+				try{
+					userInput = Integer.parseInt(input.getText());
+					runThreads();
+				}catch(Exception e){
+					JOptionPane.showMessageDialog(null,"You must enter in a value between 1000 and 100000000");
+				}
 			}
-			
-			
-			
 		}
 	}
-
-	
-		
-		
-	
 
 	private void runThreads()
 	{
 		//creates array 
 		Integer[] data = new Integer[userInput];
-		
+
 		Random generator = new Random();
-		
+
 		//loads array with random ints
 		for(int x = 0; x < data.length; x++)
 		{
 			data[x] = generator.nextInt(1000000);
-			
+
 		}
 		//creates "deep copies of array"
-		Integer[] dataClone = data.clone();
-		Integer[] dataCloneTwo = data.clone();
-		
+		Integer[] insertionData = data.clone();
+		Integer[] bubbleData = data.clone();
+		Integer[] mergeData = data.clone();
+		Integer[] quickData = data.clone();
+		Integer[] radixData = data.clone();
+
 		//passes these copies into runnable classes
-		Runnable insertionS = new InsertionSort(dataClone, insertionBar);
-		Runnable bubbleS = new BubbleSort(dataCloneTwo, bubbleBar);
-		
+		Runnable insertionSort = new InsertionSort(insertionData, insertionBar);
+		Runnable bubbleSort = new BubbleSort(bubbleData, bubbleBar);
+		Runnable mergeSort = new MergeSort(mergeData, mergeBar);
+		Runnable quickSort = new QuickSort(quickData, quickBar);
+		Runnable radixSort = new RadixSort(radixData, radixBar);
+
 		//instantiating threads
-		Thread thread1 = new Thread(bubbleS);
-		Thread thread2 = new Thread(insertionS);
-		
+		Thread bubbleThread = new Thread(bubbleSort);
+		Thread insertionThread = new Thread(insertionSort);
+		Thread mergeThread = new Thread(mergeSort);
+		Thread quickThread = new Thread(quickSort);
+		Thread radixThread = new Thread(radixSort);
+
 		//starting threads
-		thread1.start();
-		thread2.start();
-		
-		
-	}	
-	
-	//We need to figure out a way to update the progress bars. I have a method in InsertionSort and BubbleSort
-	//classes that will return an int between 0 and 100 of the progress
-	
+		bubbleThread.start();
+		insertionThread.start();
+		mergeThread.start();
+		quickThread.start();
+		radixThread.start();
+	}
 }
 

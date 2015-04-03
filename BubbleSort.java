@@ -1,5 +1,3 @@
-package Project3;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -37,10 +35,7 @@ private void outputToFile() {
 		try {
 			PrintWriter outStream = new PrintWriter(new FileWriter(outputFile, true));
 			outStream.append("BubbleSort Thread elapsed in " + timeElapsed + " nanoseconds");
-			
-			
-			
-			
+			outStream.close();
 		} catch (IOException e) {
 			System.out.println("BubbleSort didn't print you faggot");
 		}
