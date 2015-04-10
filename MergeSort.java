@@ -8,7 +8,7 @@ public class MergeSort implements Runnable {
 
 	private Integer[] data;
 	private double progressCount = 0.0;
-	private int numberOfPasses = -1;
+	private int numberOfPasses = 0;
 	private long startTime, finishTime, timeElapsed;
 	private JProgressBar bar;
 
@@ -40,13 +40,12 @@ public class MergeSort implements Runnable {
 
 	}
 
-	public int getProgress()
+	public void getProgress()
 	{
 		int result;
 		progressCount = 1 - (((double)data.length - (double)numberOfPasses)/(double)data.length);
 		result = (int) (progressCount * 100);
 		bar.setValue(result);
-		return result;
 	}
 
 	public void mergeSort()
@@ -84,8 +83,6 @@ public class MergeSort implements Runnable {
 				first2++;
 			}
 			index++;
-			numberOfPasses++;
-			getProgress();
 		}
 
 		while (first1 <= last1)
@@ -93,8 +90,6 @@ public class MergeSort implements Runnable {
 			temp[index] = data[first1];
 			first1++;
 			index++;
-			//numberOfPasses++;
-			//getProgress();
 		}
 
 		while (first2 <= last2)
@@ -102,15 +97,13 @@ public class MergeSort implements Runnable {
 			temp[index] = data[first2];
 			first2++;
 			index++;
-			//numberOfPasses++;
-			//getProgress();
 		}
 
 		for (index = first; index <= last; index++)
 		{
 			data[index] = temp[index];
-			//numberOfPasses++;
-			//getProgress();
 		}
+		numberOfPasses++;
+		getProgress();
 	}
 }
