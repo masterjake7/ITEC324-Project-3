@@ -22,33 +22,13 @@ public class QuickSort implements Runnable {
 	public void run()
 	{
 		startTime = System.nanoTime();
-		insertionSort();
+		quickSort(data, 0, data.length - 1);
 		finishTime = System.nanoTime();
 		timeElapsed = finishTime - startTime;
 		System.out.println("Quick: " + timeElapsed);
 		outputToFile();
 	}
 	
-	
-	  public void insertionSort()
-	    {
-	        for (int index = 1; index < data.length; index++)
-	        {
-	            int key = data[index];
-	            int position = index;
-				numberOfPasses++;
-				getProgress();
-	          
-	            while (position > 0 && data[position-1].compareTo(key) > 0)
-	            {
-	                data[position] = data[position-1];
-	                position--;
-	            }
-				
-	            data[position] = key;
-	        }
-	    }
-	  
 	  private void outputToFile() {
 			File outputFile = new File("output.dat");
 			try {
@@ -69,4 +49,58 @@ public class QuickSort implements Runnable {
 	  	bar.setValue(result);
 	  	return result;
 	  }
+	  
+	  private void quickSort(Integer[] data, int min, int max)
+	  {
+		  if(min < max)
+		  {
+			  int indexofpartition = partition(data, min, max);
+			  quickSort(data, min, indexofpartition - 1);
+			  quickSort(data, indexofpartition + 1, max);
+		  }
+	  }
+	  
+	  private int partition(Integer[] data, int min, int max)
+	  {
+		  Integer partitionelement;
+		  int left, right;
+		  int middle = (min + max) / 2;
+		  
+		  partitionelement = data[middle];
+		  
+		  swap(data, middle, min);
+		  
+		  left = min;
+		  right = max;
+		  
+		  while(left < right)
+		  {
+			
+				while (left < right && data[left].compareTo(partitionelement) <= 0)
+					left++;
+				
+			
+				while (data[right].compareTo(partitionelement) > 0)
+					right--;
+				
+				
+				if (left < right)
+					swap(data, left, right);
+				
+				numberOfPasses++;
+				getProgress();
+		  }
+		  
+		  swap(data, min, right);
+		  
+		  return right;
+	  }
+	
+	
+	private void swap(Integer[] data, int index1, int index2)
+	{
+		Integer temp = data[index1];
+		data[index1] = data[index2];
+		data[index2] = temp;
+	}
 }
